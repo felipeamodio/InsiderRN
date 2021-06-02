@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Modal} from 'react-native';
+import {TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Modal, ActivityIndicator} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import StatusBarPage from '../../components/StatusBarPage';
 import Menu from '../../components/Menu';
@@ -16,16 +16,35 @@ import {ContainerLogo,
         ButtonLink,
         ButtonLinkText  
     } from './styles';
+import api from '../../services/api';
 
 export default function Home(){
 
+    const [loading, setLoading] = useState(false);
     const [input, setInput] = useState(''); {/** dentro de useState vai começar com ela vazia, o setInput é o cara q chamamos p/ trocar o valor */}
     const [modalVisible, setModalVisible] = useState(false);
+    const [data, setData] = useState({});
 
 
-    function handleShortLink(){
-        //alert("URL digitada: " + input)
-        setModalVisible(true); //mudando o hook para visualizar o modal
+    async function handleShortLink(){
+        setLoading(true);
+        //setModalVisible(true); //mudando o hook para visualizar o modal
+        try{
+            const response = await api.post('/shorten',
+            {
+                long_url: input
+            })
+            setData(response.data); //toda a resposta do response vai passar por esse useState
+            setModalVisible(true);
+            Keyboard.dismiss();
+            setLoading(false);
+            setInput(''); //depois que gerou voltar o input pra vazio
+        }catch{
+            alert('Ops, parece que algo deu errado');
+            Keyboard.dismiss();
+            setInput(''); //limpando o input
+            setLoading(false) //tirando o loading quando a aplicação carregar
+        }
     }
 
     return(
@@ -77,12 +96,18 @@ export default function Home(){
                 </ContainerInput>
 
                 <ButtonLink onPress={handleShortLink}>
-                    <ButtonLinkText>Gerar Link</ButtonLinkText>
+                    {
+                        loading ? (
+                            <ActivityIndicator color="#121212" size={24} />
+                        ) : (
+                            <ButtonLinkText>Gerar Link</ButtonLinkText>
+                        )
+                    }
                 </ButtonLink>
             </ContainerContent>
             </KeyboardAvoidingView>
             <Modal visible={modalVisible} transparent animationType="slide">
-                <ModalLink onClose={() => setModalVisible(false)} />
+                <ModalLink onClose={() => setModalVisible(false)} data={data} />
             </Modal>
         </LinearGradient>
         </TouchableWithoutFeedback>
