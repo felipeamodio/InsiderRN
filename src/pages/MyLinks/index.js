@@ -19,7 +19,7 @@ export default function MyLinks(){
                 data={[{id: 1, link: 'https://google.com'}, {id: 2, link: 'https://github.com'}]}
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({item}) => <ListItem data={item} />}
-                contentContainerStyle={{paddingBottom: 20}}
+                contentContainerStyle={{paddingBottom: 22}}
                 showsVerticalScrollIndicator={false}
             />
         </Container>

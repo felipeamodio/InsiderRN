@@ -14,4 +14,6 @@ export const Title = styled.Text`
     color: #FFFFFF;
 `;
 
-export const ListLinks = styled.FlatList``;
+export const ListLinks = styled.FlatList`
+    
+`;
