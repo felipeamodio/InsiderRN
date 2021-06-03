@@ -17,6 +17,7 @@ import {ContainerLogo,
         ButtonLinkText  
     } from './styles';
 import api from '../../services/api';
+import {saveLink} from '../../utils/storeLinks';
 
 export default function Home(){
 
@@ -36,6 +37,9 @@ export default function Home(){
             })
             setData(response.data); //toda a resposta do response vai passar por esse useState
             setModalVisible(true);
+            //Deu tudo certo, preciso salvar esse link em uma lista nesse storage
+            saveLink('sujeitolinks', response.data);
+
             Keyboard.dismiss();
             setLoading(false);
             setInput(''); //depois que gerou voltar o input pra vazio
