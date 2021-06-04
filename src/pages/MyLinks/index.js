@@ -46,13 +46,13 @@ export default function MyLinks(){
             <Menu />
             <Title>Meus Links</Title>
 
-            {  loading && (
+            { loading && (
                 <ContainerEmpty>
                     <ActivityIndicator color="#FFFFFF" size={25} />
                 </ContainerEmpty>
             )}
 
-            { links.length === 0 && (
+            { !loading && links.length === 0 && (
                 <ContainerEmpty>
                     <WarningText>Você ainda não possui nenhum link 🙁</WarningText>
                 </ContainerEmpty>
